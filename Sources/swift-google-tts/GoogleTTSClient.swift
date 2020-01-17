@@ -12,8 +12,10 @@ import NIOHPACK
 import GRPC
 
 public class GoogleTTSClient {
-    public static let shared = GoogleTTSClient()
-    private init() {}
+    
+    deinit {
+        try? eventLoopGroup.syncShutdownGracefully()
+    }
     
     enum AuthError: Error {
         case noTokenProvider
@@ -26,52 +28,28 @@ public class GoogleTTSClient {
         static let scopes: [String] = ["https://www.googleapis.com/auth/cloud-platform"]
     }
     
-    public typealias Result<T> = Swift.Result<T, Error>
-    public typealias ResultCompletion<T> = (_ result: Result<T>) -> ()
+    public let eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
     
     // MARK: Public Methods
     
     /// Returns a list of Voice supported for synthesis.
     public func listVoices(
-        request: Google_Cloud_Texttospeech_V1_ListVoicesRequest,
-        completion: @escaping ResultCompletion<Google_Cloud_Texttospeech_V1_ListVoicesResponse>
-    ) throws {
-        let eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
+        request: Google_Cloud_Texttospeech_V1_ListVoicesRequest
+    ) throws -> EventLoopFuture<Google_Cloud_Texttospeech_V1_ListVoicesResponse> {
         let client = makeServiceClient(
             host: Constants.host,
             port: Constants.port,
             eventLoopGroup: eventLoopGroup
         )
-        
         let callOptions = try prepareCallOptions(eventLoopGroup: eventLoopGroup)
-        let call = client.listVoices(request, callOptions: callOptions)
-        call.response.whenComplete { result in
-            completion(result)
-        }
-        
-        if Thread.isMainThread {
-            print("✅ Main Thread")
-        } else {
-            print("❌ Not Main Thread")
-        }
-        
-//        _ = try call.response.wait()
-//        try eventLoopGroup.syncShutdownGracefully()
-//        eventLoopGroup.shutdownGracefully { (error) in
-//            if let error = error {
-//                print("Shut down \(error)")
-//            } else {
-//                print("no error, shut down gracefully")
-//            }
-//        }
+        return client.listVoices(request, callOptions: callOptions).response
     }
     
     /// Synthesizes speech synchronously: receive results after all text input
     /// has been processed.
     public func synthesizeSpeech(
-        request: Google_Cloud_Texttospeech_V1_SynthesizeSpeechRequest,
-        completion: @escaping ResultCompletion<Google_Cloud_Texttospeech_V1_SynthesizeSpeechResponse>
-    ) throws {
+        request: Google_Cloud_Texttospeech_V1_SynthesizeSpeechRequest
+    ) throws -> EventLoopFuture<Google_Cloud_Texttospeech_V1_SynthesizeSpeechResponse> {
         let eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
         let client = makeServiceClient(
             host: Constants.host,
@@ -79,16 +57,12 @@ public class GoogleTTSClient {
             eventLoopGroup: eventLoopGroup
         )
         let callOptions = try prepareCallOptions(eventLoopGroup: eventLoopGroup)
-        let call = client.synthesizeSpeech(request, callOptions: callOptions)
-        call.response.whenComplete { result in
-            completion(result)
-        }
+        return client.synthesizeSpeech(request, callOptions: callOptions).response
     }
 
     // MARK: Private Methods
     
     private func prepareCallOptions(eventLoopGroup: EventLoopGroup) throws -> CallOptions {
-        // Get an auth token.
         let authToken = try getAuthToken(
             scopes: Constants.scopes,
             eventLoop: eventLoopGroup.next()
