@@ -12,7 +12,7 @@ import NIOHPACK
 import GRPC
 
 public class GoogleTTSClient {
-    static let shared = GoogleTTSClient()
+    public static let shared = GoogleTTSClient()
     private init() {}
     
     enum AuthError: Error {
