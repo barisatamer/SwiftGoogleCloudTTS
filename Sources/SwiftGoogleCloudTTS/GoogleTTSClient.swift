@@ -28,11 +28,15 @@ public class GoogleTTSClient {
         static let scopes: [String] = ["https://www.googleapis.com/auth/cloud-platform"]
     }
     
-    public let eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
+    public var eventLoopGroup: EventLoopGroup
     
     // MARK: Public Initializer
     
-    public init() {}
+    public init(
+        eventLoopGroup: EventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
+    ) {
+        self.eventLoopGroup = eventLoopGroup
+    }
     
     // MARK: Public Methods
     
@@ -56,7 +60,6 @@ public class GoogleTTSClient {
     public func synthesizeSpeech(
         request: Google_Cloud_Texttospeech_V1_SynthesizeSpeechRequest
     ) throws -> EventLoopFuture<Google_Cloud_Texttospeech_V1_SynthesizeSpeechResponse> {
-        let eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
         let client = makeServiceClient(
             host: Constants.host,
             port: Constants.port,
@@ -114,7 +117,7 @@ public class GoogleTTSClient {
     private func makeServiceClient(
         host: String,
         port: Int,
-        eventLoopGroup: MultiThreadedEventLoopGroup
+        eventLoopGroup: EventLoopGroup
     ) -> Google_Cloud_Texttospeech_V1_TextToSpeechServiceClient {
         let configuration = ClientConnection.Configuration(
             target: .hostAndPort(host, port),
