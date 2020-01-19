@@ -14,7 +14,7 @@ import GRPC
 public class GoogleTTSClient {
     
     deinit {
-        try? eventLoopGroup.syncShutdownGracefully()
+        // try? eventLoopGroup.syncShutdownGracefully()
     }
     
     enum AuthError: Error {
