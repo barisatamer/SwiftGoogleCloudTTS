@@ -30,6 +30,10 @@ public class GoogleTTSClient {
     
     public let eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
     
+    // MARK: Public Initializer
+    
+    public init() {}
+    
     // MARK: Public Methods
     
     /// Returns a list of Voice supported for synthesis.
