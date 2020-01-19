@@ -1,7 +1,7 @@
 # SwiftGoogleCloudTTS
 <p align="left">
   <a href="https://swift.org">
-    <img src="http://img.shields.io/badge/swift-5.0-brightgreen.svg" alt="Swift 5.0">
+    <img src="http://img.shields.io/badge/swift-5.1-brightgreen.svg" alt="Swift 5.1">
   </a>
   <a href="LICENSE">
     <img src="http://img.shields.io/badge/license-MIT-brightgreen.svg" alt="MIT License">
