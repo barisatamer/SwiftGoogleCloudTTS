@@ -45,8 +45,10 @@ public class GoogleTTSClient {
             port: Constants.port,
             eventLoopGroup: eventLoopGroup
         )
-        let callOptions = try prepareCallOptions(eventLoopGroup: eventLoopGroup)
-        return client.listVoices(request, callOptions: callOptions).response
+        return try prepareCallOptions(eventLoopGroup: eventLoopGroup)
+            .flatMap { callOptions -> EventLoopFuture<Google_Cloud_Texttospeech_V1_ListVoicesResponse> in
+                return client.listVoices(request, callOptions: callOptions).response
+        }
     }
     
     /// Synthesizes speech synchronously: receive results after all text input
@@ -60,23 +62,25 @@ public class GoogleTTSClient {
             port: Constants.port,
             eventLoopGroup: eventLoopGroup
         )
-        let callOptions = try prepareCallOptions(eventLoopGroup: eventLoopGroup)
-        return client.synthesizeSpeech(request, callOptions: callOptions).response
+        return try prepareCallOptions(eventLoopGroup: eventLoopGroup)
+            .flatMap { callOptions -> EventLoopFuture<Google_Cloud_Texttospeech_V1_SynthesizeSpeechResponse> in
+                return client.synthesizeSpeech(request, callOptions: callOptions).response
+        }
     }
 
     // MARK: Private Methods
     
-    private func prepareCallOptions(eventLoopGroup: EventLoopGroup) throws -> CallOptions {
-        let authToken = try getAuthToken(
+    private func prepareCallOptions(eventLoopGroup: EventLoopGroup) throws -> EventLoopFuture<CallOptions> {
+        return getAuthToken(
             scopes: Constants.scopes,
             eventLoop: eventLoopGroup.next()
-        ).wait()
-        
-        // Use CallOptions to send the auth token (necessary) and set a custom timeout (optional).
-        let headers: HPACKHeaders = ["authorization": "Bearer \(authToken)"]
-        let callOptions = CallOptions(customMetadata: headers, timeout: .seconds(rounding: 30))
-        debugPrint("CALL OPTIONS\n\(callOptions)\n")
-        return callOptions
+        ).map { authToken -> (CallOptions) in
+            // Use CallOptions to send the auth token (necessary) and set a custom timeout (optional).
+            let headers: HPACKHeaders = ["authorization": "Bearer \(authToken)"]
+            let callOptions = CallOptions(customMetadata: headers, timeout: .seconds(rounding: 30))
+            debugPrint("CALL OPTIONS\n\(callOptions)\n")
+            return callOptions
+        }
     }
     
     /// Get an auth token and return a future to provide its value.
