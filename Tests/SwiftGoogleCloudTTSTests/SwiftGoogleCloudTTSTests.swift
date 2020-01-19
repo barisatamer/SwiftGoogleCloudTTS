@@ -1,7 +1,7 @@
 import XCTest
-@testable import swift_google_tts
+@testable import SwiftGoogleCloudTTS
 
-final class swift_google_ttsTests: XCTestCase {
+final class SwiftGoogleCloudTTSTests: XCTestCase {
     
     var client: GoogleTTSClient = GoogleTTSClient()
     

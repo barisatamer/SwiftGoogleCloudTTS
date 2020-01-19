@@ -1,3 +1,3 @@
-# swift-google-tts
+# SwiftGoogleCloudTTS
 
 A description of this package.

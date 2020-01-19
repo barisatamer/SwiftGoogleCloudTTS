@@ -4,9 +4,9 @@
 import PackageDescription
 
 let package = Package(
-    name: "swift-google-tts",
+    name: "SwiftGoogleCloudTTS",
     products: [
-        .library(name: "swift-google-tts", targets: ["swift-google-tts"]),
+        .library(name: "SwiftGoogleCloudTTS", targets: ["SwiftGoogleCloudTTS"]),
     ],
     dependencies: [
         .package(url: "https://github.com/grpc/grpc-swift.git", from: "1.0.0-alpha.6"),
@@ -15,10 +15,10 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "swift-google-tts",
+            name: "SwiftGoogleCloudTTS",
             dependencies: ["GRPC", "SwiftProtobuf", "OAuth2"]),
         .testTarget(
-            name: "swift-google-ttsTests",
-            dependencies: ["swift-google-tts"]),
+            name: "SwiftGoogleCloudTTSTests",
+            dependencies: ["SwiftGoogleCloudTTS"]),
     ]
 )
