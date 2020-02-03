@@ -13,10 +13,6 @@ import GRPC
 
 public class GoogleTTSClient {
     
-    deinit {
-        // try? eventLoopGroup.syncShutdownGracefully()
-    }
-    
     enum AuthError: Error {
         case noTokenProvider
         case tokenProviderFailed
@@ -70,6 +66,10 @@ public class GoogleTTSClient {
                 return client.synthesizeSpeech(request, callOptions: callOptions).response
         }
     }
+    
+    public func shutDown() {
+        try? eventLoopGroup.syncShutdownGracefully()
+    }
 
     // MARK: Private Methods
     
@@ -87,6 +87,7 @@ public class GoogleTTSClient {
     }
     
     /// Get an auth token and return a future to provide its value.
+    private var token: Token?
     private func getAuthToken(
         scopes: [String],
         eventLoop: EventLoop
@@ -96,19 +97,32 @@ public class GoogleTTSClient {
             promise.fail(AuthError.noTokenProvider)
             return promise.futureResult
         }
-        do {
-            try provider.withToken { (token, error) in
-                if let token = token,
-                    let accessToken = token.AccessToken {
-                    promise.succeed(accessToken)
-                } else if let error = error {
-                    promise.fail(error)
-                } else {
-                    promise.fail(AuthError.tokenProviderFailed)
+        
+        if let token = self.token,
+            let accessToken = token.AccessToken,
+            let expiresIn = token.ExpiresIn,
+            let creationTime = token.CreationTime,
+            creationTime.addingTimeInterval(TimeInterval(expiresIn)) > Date() {
+            // TODO: Use refresh token
+            promise.succeed(accessToken)
+        } else {
+            do {
+                try provider.withToken { (token, error) in
+                    if var token = token, let accessToken = token.AccessToken {
+                        if token.CreationTime == nil {
+                            token.CreationTime = Date()
+                        }
+                        self.token = token
+                        promise.succeed(accessToken)
+                    } else if let error = error {
+                        promise.fail(error)
+                    } else {
+                        promise.fail(AuthError.tokenProviderFailed)
+                    }
                 }
+            } catch {
+                promise.fail(error)
             }
-        } catch {
-            promise.fail(error)
         }
         return promise.futureResult
     }
