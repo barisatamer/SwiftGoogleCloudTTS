@@ -9,14 +9,16 @@ let package = Package(
         .library(name: "SwiftGoogleCloudTTS", targets: ["SwiftGoogleCloudTTS"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/grpc/grpc-swift.git", from: "1.0.0-alpha.11"),
-        .package(url: "https://github.com/apple/swift-protobuf.git", from: "1.7.0"),
-        .package(url: "https://github.com/googleapis/google-auth-library-swift.git", from: "0.5.1")
+        .package(name: "grpc-swift", url: "https://github.com/grpc/grpc-swift.git", from: "1.0.0-alpha.11"),
+        .package(name: "SwiftProtobuf", url: "https://github.com/apple/swift-protobuf.git", from: "1.7.0"),
+        .package(name: "Auth", url: "https://github.com/googleapis/google-auth-library-swift.git", from: "0.5.1")
     ],
     targets: [
-        .target(
-            name: "SwiftGoogleCloudTTS",
-            dependencies: ["GRPC", "SwiftProtobuf", "OAuth2"]),
+        .target(name: "SwiftGoogleCloudTTS", dependencies: [
+            .product(name: "GRPC", package: "grpc-swift"), 
+            .product(name: "SwiftProtobuf", package: "SwiftProtobuf"), 
+            .product(name: "OAuth2", package: "Auth")
+        ]),
         .testTarget(
             name: "SwiftGoogleCloudTTSTests",
             dependencies: ["SwiftGoogleCloudTTS"]),
