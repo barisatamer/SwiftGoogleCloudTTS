@@ -1,4 +1,4 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.2
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -9,7 +9,7 @@ let package = Package(
         .library(name: "SwiftGoogleCloudTTS", targets: ["SwiftGoogleCloudTTS"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/grpc/grpc-swift.git", from: "1.0.0-alpha.6"),
+        .package(url: "https://github.com/grpc/grpc-swift.git", from: "1.0.0-alpha.11"),
         .package(url: "https://github.com/apple/swift-protobuf.git", from: "1.7.0"),
         .package(url: "https://github.com/googleapis/google-auth-library-swift.git", from: "0.5.1")
     ],
