@@ -1,0 +1,40 @@
+#!/bin/sh
+
+echo "Generating protocol buffer files..."
+
+mkdir -p ProtocolBuffers/ && cd ProtocolBuffers/
+
+# 1 - Fetch GRPC Swift & Generate GRPC Plugin
+#     The plugin must be ready at .build/release/protoc-gen-grpc-swift
+git clone https://github.com/grpc/grpc-swift.git
+
+cd grpc-swift
+git fetch --all --tags
+git checkout 1.0.0-alpha.11
+make plugins
+
+
+# 2 - Fetch Google Apis for Protocol Buffers files
+cd ..
+git clone https://github.com/googleapis/googleapis.git
+
+mkdir -p GeneratedSources/TextToSpeech/
+cd googleapis
+pwd
+
+# TODO: Install if does not exists
+# brew install protobuf 
+
+protoc google/cloud/texttospeech/v1beta1/*.proto \
+		--plugin=../grpc-swift/protoc-gen-swift \
+		--swift_opt=Visibility=Public \
+		--swift_out=../GeneratedSources/TextToSpeech/ 
+protoc google/cloud/texttospeech/v1beta1/*.proto \
+		--plugin=../grpc-swift/protoc-gen-grpc-swift \
+		--grpc-swift_opt=Visibility=Public \
+		--grpc-swift_out=../GeneratedSources/TextToSpeech/
+
+cp ../GeneratedSources/TextToSpeech/google/cloud/texttospeech/v1beta1/* ../../Sources/SwiftGoogleCloudTTS/ProtoModels/
+
+
+printf "\e[32mDone!\e[m\n"		
