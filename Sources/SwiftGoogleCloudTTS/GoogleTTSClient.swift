@@ -38,15 +38,15 @@ public class GoogleTTSClient {
     
     /// Returns a list of Voice supported for synthesis.
     public func listVoices(
-        request: Google_Cloud_Texttospeech_V1_ListVoicesRequest
-    ) throws -> EventLoopFuture<Google_Cloud_Texttospeech_V1_ListVoicesResponse> {
+        request: Google_Cloud_Texttospeech_V1beta1_ListVoicesRequest
+    ) throws -> EventLoopFuture<Google_Cloud_Texttospeech_V1beta1_ListVoicesResponse> {
         let client = makeServiceClient(
             host: Constants.host,
             port: Constants.port,
             eventLoopGroup: eventLoopGroup
         )
         return try prepareCallOptions(eventLoopGroup: eventLoopGroup)
-            .flatMap { callOptions -> EventLoopFuture<Google_Cloud_Texttospeech_V1_ListVoicesResponse> in
+            .flatMap { callOptions -> EventLoopFuture<Google_Cloud_Texttospeech_V1beta1_ListVoicesResponse> in
                 return client.listVoices(request, callOptions: callOptions).response
         }
     }
@@ -54,15 +54,15 @@ public class GoogleTTSClient {
     /// Synthesizes speech synchronously: receive results after all text input
     /// has been processed.
     public func synthesizeSpeech(
-        request: Google_Cloud_Texttospeech_V1_SynthesizeSpeechRequest
-    ) throws -> EventLoopFuture<Google_Cloud_Texttospeech_V1_SynthesizeSpeechResponse> {
+        request: Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechRequest
+    ) throws -> EventLoopFuture<Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechResponse> {
         let client = makeServiceClient(
             host: Constants.host,
             port: Constants.port,
             eventLoopGroup: eventLoopGroup
         )
         return try prepareCallOptions(eventLoopGroup: eventLoopGroup)
-            .flatMap { callOptions -> EventLoopFuture<Google_Cloud_Texttospeech_V1_SynthesizeSpeechResponse> in
+            .flatMap { callOptions -> EventLoopFuture<Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechResponse> in
                 return client.synthesizeSpeech(request, callOptions: callOptions).response
         }
     }
@@ -132,13 +132,13 @@ public class GoogleTTSClient {
         host: String,
         port: Int,
         eventLoopGroup: EventLoopGroup
-    ) -> Google_Cloud_Texttospeech_V1_TextToSpeechServiceClient {
+    ) -> Google_Cloud_Texttospeech_V1beta1_TextToSpeechClient {
         let configuration = ClientConnection.Configuration(
             target: .hostAndPort(host, port),
             eventLoopGroup: eventLoopGroup,
             tls: .init()
         )
         let connection = ClientConnection(configuration: configuration)
-        return Google_Cloud_Texttospeech_V1_TextToSpeechServiceClient(connection: connection)
+        return Google_Cloud_Texttospeech_V1beta1_TextToSpeechClient(connection: connection)
     }
 }
