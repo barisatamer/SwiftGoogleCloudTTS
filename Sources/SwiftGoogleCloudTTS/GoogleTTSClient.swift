@@ -139,6 +139,6 @@ public class GoogleTTSClient {
             tls: .init()
         )
         let connection = ClientConnection(configuration: configuration)
-        return Google_Cloud_Texttospeech_V1beta1_TextToSpeechClient(connection: connection)
+        return .init(channel: connection)
     }
 }
