@@ -39,13 +39,13 @@ public class GoogleTTSClient {
     /// Returns a list of Voice supported for synthesis.
     public func listVoices(
         request: Google_Cloud_Texttospeech_V1beta1_ListVoicesRequest
-    ) throws -> EventLoopFuture<Google_Cloud_Texttospeech_V1beta1_ListVoicesResponse> {
+    ) -> EventLoopFuture<Google_Cloud_Texttospeech_V1beta1_ListVoicesResponse> {
         let client = makeServiceClient(
             host: Constants.host,
             port: Constants.port,
             eventLoopGroup: eventLoopGroup
         )
-        return try prepareCallOptions(eventLoopGroup: eventLoopGroup)
+        return prepareCallOptions(eventLoopGroup: eventLoopGroup)
             .flatMap { callOptions -> EventLoopFuture<Google_Cloud_Texttospeech_V1beta1_ListVoicesResponse> in
                 return client.listVoices(request, callOptions: callOptions).response
         }
@@ -55,13 +55,13 @@ public class GoogleTTSClient {
     /// has been processed.
     public func synthesizeSpeech(
         request: Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechRequest
-    ) throws -> EventLoopFuture<Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechResponse> {
+    ) -> EventLoopFuture<Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechResponse> {
         let client = makeServiceClient(
             host: Constants.host,
             port: Constants.port,
             eventLoopGroup: eventLoopGroup
         )
-        return try prepareCallOptions(eventLoopGroup: eventLoopGroup)
+        return prepareCallOptions(eventLoopGroup: eventLoopGroup)
             .flatMap { callOptions -> EventLoopFuture<Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechResponse> in
                 return client.synthesizeSpeech(request, callOptions: callOptions).response
         }
@@ -73,7 +73,7 @@ public class GoogleTTSClient {
 
     // MARK: Private Methods
     
-    private func prepareCallOptions(eventLoopGroup: EventLoopGroup) throws -> EventLoopFuture<CallOptions> {
+    private func prepareCallOptions(eventLoopGroup: EventLoopGroup) -> EventLoopFuture<CallOptions> {
         return getAuthToken(
             scopes: Constants.scopes,
             eventLoop: eventLoopGroup.next()
