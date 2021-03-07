@@ -80,7 +80,7 @@ public class GoogleTTSClient {
         ).map { authToken -> (CallOptions) in
             // Use CallOptions to send the auth token (necessary) and set a custom timeout (optional).
             let headers: HPACKHeaders = ["authorization": "Bearer \(authToken)"]
-            let callOptions = CallOptions(customMetadata: headers, timeout: .seconds(rounding: 30))
+            let callOptions = CallOptions(customMetadata: headers, timeLimit: .timeout(.seconds(30)))
             debugPrint("CALL OPTIONS\n\(callOptions)\n")
             return callOptions
         }
