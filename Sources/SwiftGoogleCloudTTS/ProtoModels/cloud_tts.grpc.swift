@@ -20,43 +20,50 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-import Foundation
 import GRPC
 import NIO
-import NIOHTTP1
 import SwiftProtobuf
 
 
-/// Usage: instantiate Google_Cloud_Texttospeech_V1beta1_TextToSpeechClient, then call methods of this protocol to make API calls.
-public protocol Google_Cloud_Texttospeech_V1beta1_TextToSpeechClientProtocol {
-  func listVoices(_ request: Google_Cloud_Texttospeech_V1beta1_ListVoicesRequest, callOptions: CallOptions?) -> UnaryCall<Google_Cloud_Texttospeech_V1beta1_ListVoicesRequest, Google_Cloud_Texttospeech_V1beta1_ListVoicesResponse>
-  func synthesizeSpeech(_ request: Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechRequest, callOptions: CallOptions?) -> UnaryCall<Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechRequest, Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechResponse>
+/// Service that implements Google Cloud Text-to-Speech API.
+///
+/// Usage: instantiate `Google_Cloud_Texttospeech_V1beta1_TextToSpeechClient`, then call methods of this protocol to make API calls.
+public protocol Google_Cloud_Texttospeech_V1beta1_TextToSpeechClientProtocol: GRPCClient {
+  var serviceName: String { get }
+  var interceptors: Google_Cloud_Texttospeech_V1beta1_TextToSpeechClientInterceptorFactoryProtocol? { get }
+
+  func listVoices(
+    _ request: Google_Cloud_Texttospeech_V1beta1_ListVoicesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Google_Cloud_Texttospeech_V1beta1_ListVoicesRequest, Google_Cloud_Texttospeech_V1beta1_ListVoicesResponse>
+
+  func synthesizeSpeech(
+    _ request: Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechRequest, Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechResponse>
 }
 
-public final class Google_Cloud_Texttospeech_V1beta1_TextToSpeechClient: GRPCClient, Google_Cloud_Texttospeech_V1beta1_TextToSpeechClientProtocol {
-  public let channel: GRPCChannel
-  public var defaultCallOptions: CallOptions
-
-  /// Creates a client for the google.cloud.texttospeech.v1beta1.TextToSpeech service.
-  ///
-  /// - Parameters:
-  ///   - channel: `GRPCChannel` to the service host.
-  ///   - defaultCallOptions: Options to use for each service call if the user doesn't provide them.
-  public init(channel: GRPCChannel, defaultCallOptions: CallOptions = CallOptions()) {
-    self.channel = channel
-    self.defaultCallOptions = defaultCallOptions
+extension Google_Cloud_Texttospeech_V1beta1_TextToSpeechClientProtocol {
+  public var serviceName: String {
+    return "google.cloud.texttospeech.v1beta1.TextToSpeech"
   }
 
   /// Returns a list of Voice supported for synthesis.
   ///
   /// - Parameters:
   ///   - request: Request to send to ListVoices.
-  ///   - callOptions: Call options; `self.defaultCallOptions` is used if `nil`.
+  ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func listVoices(_ request: Google_Cloud_Texttospeech_V1beta1_ListVoicesRequest, callOptions: CallOptions? = nil) -> UnaryCall<Google_Cloud_Texttospeech_V1beta1_ListVoicesRequest, Google_Cloud_Texttospeech_V1beta1_ListVoicesResponse> {
-    return self.makeUnaryCall(path: "/google.cloud.texttospeech.v1beta1.TextToSpeech/ListVoices",
-                              request: request,
-                              callOptions: callOptions ?? self.defaultCallOptions)
+  public func listVoices(
+    _ request: Google_Cloud_Texttospeech_V1beta1_ListVoicesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Google_Cloud_Texttospeech_V1beta1_ListVoicesRequest, Google_Cloud_Texttospeech_V1beta1_ListVoicesResponse> {
+    return self.makeUnaryCall(
+      path: "/google.cloud.texttospeech.v1beta1.TextToSpeech/ListVoices",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListVoicesInterceptors() ?? []
+    )
   }
 
   /// Synthesizes speech synchronously: receive results after all text input
@@ -64,55 +71,107 @@ public final class Google_Cloud_Texttospeech_V1beta1_TextToSpeechClient: GRPCCli
   ///
   /// - Parameters:
   ///   - request: Request to send to SynthesizeSpeech.
-  ///   - callOptions: Call options; `self.defaultCallOptions` is used if `nil`.
+  ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func synthesizeSpeech(_ request: Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechRequest, callOptions: CallOptions? = nil) -> UnaryCall<Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechRequest, Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechResponse> {
-    return self.makeUnaryCall(path: "/google.cloud.texttospeech.v1beta1.TextToSpeech/SynthesizeSpeech",
-                              request: request,
-                              callOptions: callOptions ?? self.defaultCallOptions)
+  public func synthesizeSpeech(
+    _ request: Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechRequest, Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechResponse> {
+    return self.makeUnaryCall(
+      path: "/google.cloud.texttospeech.v1beta1.TextToSpeech/SynthesizeSpeech",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSynthesizeSpeechInterceptors() ?? []
+    )
   }
-
 }
 
+public protocol Google_Cloud_Texttospeech_V1beta1_TextToSpeechClientInterceptorFactoryProtocol {
+
+  /// - Returns: Interceptors to use when invoking 'listVoices'.
+  func makeListVoicesInterceptors() -> [ClientInterceptor<Google_Cloud_Texttospeech_V1beta1_ListVoicesRequest, Google_Cloud_Texttospeech_V1beta1_ListVoicesResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'synthesizeSpeech'.
+  func makeSynthesizeSpeechInterceptors() -> [ClientInterceptor<Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechRequest, Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechResponse>]
+}
+
+public final class Google_Cloud_Texttospeech_V1beta1_TextToSpeechClient: Google_Cloud_Texttospeech_V1beta1_TextToSpeechClientProtocol {
+  public let channel: GRPCChannel
+  public var defaultCallOptions: CallOptions
+  public var interceptors: Google_Cloud_Texttospeech_V1beta1_TextToSpeechClientInterceptorFactoryProtocol?
+
+  /// Creates a client for the google.cloud.texttospeech.v1beta1.TextToSpeech service.
+  ///
+  /// - Parameters:
+  ///   - channel: `GRPCChannel` to the service host.
+  ///   - defaultCallOptions: Options to use for each service call if the user doesn't provide them.
+  ///   - interceptors: A factory providing interceptors for each RPC.
+  public init(
+    channel: GRPCChannel,
+    defaultCallOptions: CallOptions = CallOptions(),
+    interceptors: Google_Cloud_Texttospeech_V1beta1_TextToSpeechClientInterceptorFactoryProtocol? = nil
+  ) {
+    self.channel = channel
+    self.defaultCallOptions = defaultCallOptions
+    self.interceptors = interceptors
+  }
+}
+
+/// Service that implements Google Cloud Text-to-Speech API.
+///
 /// To build a server, implement a class that conforms to this protocol.
 public protocol Google_Cloud_Texttospeech_V1beta1_TextToSpeechProvider: CallHandlerProvider {
+  var interceptors: Google_Cloud_Texttospeech_V1beta1_TextToSpeechServerInterceptorFactoryProtocol? { get }
+
   /// Returns a list of Voice supported for synthesis.
   func listVoices(request: Google_Cloud_Texttospeech_V1beta1_ListVoicesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Google_Cloud_Texttospeech_V1beta1_ListVoicesResponse>
+
   /// Synthesizes speech synchronously: receive results after all text input
   /// has been processed.
   func synthesizeSpeech(request: Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechResponse>
 }
 
 extension Google_Cloud_Texttospeech_V1beta1_TextToSpeechProvider {
-  public var serviceName: String { return "google.cloud.texttospeech.v1beta1.TextToSpeech" }
+  public var serviceName: Substring { return "google.cloud.texttospeech.v1beta1.TextToSpeech" }
 
   /// Determines, calls and returns the appropriate request handler, depending on the request's method.
   /// Returns nil for methods not handled by this service.
-  public func handleMethod(_ methodName: String, callHandlerContext: CallHandlerContext) -> GRPCCallHandler? {
-    switch methodName {
+  public func handle(
+    method name: Substring,
+    context: CallHandlerContext
+  ) -> GRPCServerHandlerProtocol? {
+    switch name {
     case "ListVoices":
-      return UnaryCallHandler(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listVoices(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Google_Cloud_Texttospeech_V1beta1_ListVoicesRequest>(),
+        responseSerializer: ProtobufSerializer<Google_Cloud_Texttospeech_V1beta1_ListVoicesResponse>(),
+        interceptors: self.interceptors?.makeListVoicesInterceptors() ?? [],
+        userFunction: self.listVoices(request:context:)
+      )
 
     case "SynthesizeSpeech":
-      return UnaryCallHandler(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.synthesizeSpeech(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechRequest>(),
+        responseSerializer: ProtobufSerializer<Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechResponse>(),
+        interceptors: self.interceptors?.makeSynthesizeSpeechInterceptors() ?? [],
+        userFunction: self.synthesizeSpeech(request:context:)
+      )
 
-    default: return nil
+    default:
+      return nil
     }
   }
 }
 
+public protocol Google_Cloud_Texttospeech_V1beta1_TextToSpeechServerInterceptorFactoryProtocol {
 
-// Provides conformance to `GRPCPayload` for request and response messages
-extension Google_Cloud_Texttospeech_V1beta1_ListVoicesRequest: GRPCProtobufPayload {}
-extension Google_Cloud_Texttospeech_V1beta1_ListVoicesResponse: GRPCProtobufPayload {}
-extension Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechRequest: GRPCProtobufPayload {}
-extension Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechResponse: GRPCProtobufPayload {}
+  /// - Returns: Interceptors to use when handling 'listVoices'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListVoicesInterceptors() -> [ServerInterceptor<Google_Cloud_Texttospeech_V1beta1_ListVoicesRequest, Google_Cloud_Texttospeech_V1beta1_ListVoicesResponse>]
 
+  /// - Returns: Interceptors to use when handling 'synthesizeSpeech'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeSynthesizeSpeechInterceptors() -> [ServerInterceptor<Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechRequest, Google_Cloud_Texttospeech_V1beta1_SynthesizeSpeechResponse>]
+}

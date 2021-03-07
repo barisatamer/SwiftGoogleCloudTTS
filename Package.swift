@@ -9,7 +9,7 @@ let package = Package(
         .library(name: "SwiftGoogleCloudTTS", targets: ["SwiftGoogleCloudTTS"]),
     ],
     dependencies: [
-        .package(name: "grpc-swift", url: "https://github.com/grpc/grpc-swift.git", from: "1.0.0-alpha.11"),
+        .package(name: "grpc-swift", url: "https://github.com/grpc/grpc-swift.git", from: "1.0.0"),
         .package(name: "SwiftProtobuf", url: "https://github.com/apple/swift-protobuf.git", from: "1.7.0"),
         .package(name: "Auth", url: "https://github.com/googleapis/google-auth-library-swift.git", from: "0.5.1")
     ],
